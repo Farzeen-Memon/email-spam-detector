@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spam Detector</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 0 20px;
+      transition: background-color 0.5s ease;
+    }
+    .container {
+      background-color: rgba(0,0,0,0.6);
+      padding: 30px 40px;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 25px;
+      font-weight: 700;
+      font-size: 2.8rem;
+      letter-spacing: 1px;
+    }
+    textarea {
+      width: 100%;
+      height: 150px;
+      border-radius: 10px;
+      border: none;
+      padding: 15px;
+      resize: none;
+      font-size: 1rem;
+      font-family: inherit;
+      box-shadow: inset 0 0 10px rgba(255,255,255,0.2);
+      transition: box-shadow 0.3s ease;
+      color: #333;
+    }
+    textarea:focus {
+      outline: none;
+      box-shadow: inset 0 0 12px #2575fc;
+    }
+    button {
+      margin-top: 20px;
+      background-color: #2575fc;
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 5px 15px rgba(37, 117, 252, 0.4);
+      margin-left: 10px;
+    }
+    button:hover {
+      background-color: #1a55d3;
+      box-shadow: 0 7px 20px rgba(26, 85, 211, 0.6);
+    }
+    .result {
+      margin-top: 35px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      padding: 15px;
+      border-radius: 10px;
+      transition: background-color 1s ease, color 1s ease;
+      text-align: left;
+      white-space: pre-wrap;
+      display: none; /* Initially hidden */
+    }
+    .ham {
+      background-color: #28a745; /* green */
+      color: white;
+      animation: glow 1.5s ease-in-out infinite alternate;
+    }
+    @keyframes glow {
+      from {
+        box-shadow: 0 0 5px 2px #28a745;
+      }
+      to {
+        box-shadow: 0 0 20px 5px #28a745;
+      }
+    }
+    .spam {
+      background: linear-gradient(45deg, #ff4e50, #f9d423);
+      color: #4a0101;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 5px 2px rgba(255,78,80,0.7);
+      }
+      50% {
+        box-shadow: 0 0 15px 6px rgba(255,78,80,1);
+      }
+      100% {
+        box-shadow: 0 0 5px 2px rgba(255,78,80,0.7);
+      }
+    }
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 2rem;
+      }
+      .result {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Email/SMS Spam Detector</h1>
+    <form id="spamForm">
+      <textarea name="message" id="messageInput" placeholder="Enter your message here..."></textarea><br />
+      <button type="submit">Check Spam</button>
+    </form>
+    <div id="result" class="result">
+      <strong>Message:</strong>
+      <div id="displayMessage"></div>
+      <br />
+      <strong>Prediction:</strong> <span id="displayPrediction"></span>
+      <br /><br />
+      <button id="okBtn">OK</button>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('spamForm').addEventListener('submit', function(e) {
+      e.preventDefault(); // Prevent default form submission
+
+      const message = document.getElementById('messageInput').value.trim();
+
+      if (!message) {
+        alert('Please enter a message.');
+        return;
+      }
+
+      // Fake prediction function - replace with AJAX call to Flask backend
+      // For demo, treat any message containing "free" or "win" as spam
+      let prediction = 'Ham';
+      let lower = message.toLowerCase();
+      if (lower.includes('free') || lower.includes('win') || lower.includes('urgent')) {
+        prediction = 'Spam';
+      }
+
+      // Display result with styling and glow
+      const resultDiv = document.getElementById('result');
+      const dispMsg = document.getElementById('displayMessage');
+      const dispPred = document.getElementById('displayPrediction');
+
+      dispMsg.textContent = message;
+      dispPred.textContent = prediction;
+
+      // Reset old classes
+      resultDiv.classList.remove('ham', 'spam');
+      if(prediction === 'Ham'){
+        resultDiv.classList.add('ham');
+      } else {
+        resultDiv.classList.add('spam');
+      }
+      resultDiv.style.display = 'block';
+
+      // Hide form for input
+      this.style.display = 'none';
+    });
+
+    document.getElementById('okBtn').addEventListener('click', function() {
+      const form = document.getElementById('spamForm');
+      const resultDiv = document.getElementById('result');
+
+      // Reset form and hide result
+      form.reset();
+      form.style.display = 'block';
+      resultDiv.style.display = 'none';
+
+      // Focus textarea for convenience
+      form.elements['message'].focus();
+    });
+  </script>
+</body>
+</html>
