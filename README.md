@@ -5,6 +5,9 @@ This Email Spam Detector is built using Python and Flask, incorporating Natural 
 Tech Stack
 
 • Python for programming
+
 • scikit-learn for machine learning and TF-IDF vectorization
+
 • TF-IDF (Term Frequency-Inverse Document Frequency) for text feature extraction
+
 • Logistic Regression as the classification algorithm
